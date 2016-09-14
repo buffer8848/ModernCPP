@@ -1,6 +1,6 @@
-# 如何高效的传递对象给异步lambda表达式
+# 如何高效的传递对象给异步方法
 
-在c++移动语义(std::move)到来之前，我们在异步的lambda表达式中传递对象的时候，往往需要传值给异步的lambda才能保证对象在有效的生命周期被使用。
+在c++移动语义(std::move)到来之前，我们在异步方法中传递对象的时候，往往需要传值给异步方法才能保证对象在有效的生命周期被使用。
 伪代码如下：
 ```
 #include <iostream>
@@ -107,7 +107,7 @@ public:
         std::cout << "Object copy construct." << std::endl;
     }
 
-    Object(Object&& rhs) : value_(std::move(rhs.value_)) 
+    Object(Object&& rhs) : value_(std::move(rhs.value_)) //移动语义
     {
         std::cout << "Object move copy construct." << std::endl;
     }
@@ -119,7 +119,7 @@ public:
         return *this;
     }
 
-    Object& operator=(Object&& rhs) {
+    Object& operator=(Object&& rhs) { //移动语义
         value_ = std::move(rhs.value_);
         std::cout << "Object move assign construct." << std::endl;
 
@@ -172,7 +172,7 @@ f = std::async(std::launch::deferred, [obj{ std::move(object) }] {
     print(obj);
 });
 ```
-直观上讲，似乎我们已经做到了将object的生命周期转移到了异步的lamba表达式上下文中，其实不然，我们来看看结果：
+这样写的前提是对象支持初始化列表构造，下面结果看来初始化列表只是保留了引用没有发生copy，我们来看看结果：
 ```
 Object default construct.
 Object move copy construct.
