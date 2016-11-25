@@ -1,2 +1,4 @@
 涉及到的关键字：auto, decltype, std::initialize_list, thread_local, 4 cast, nullptr, nullptr_t, typeid, typename
 涉及到的概念：智能指针，
+涉及的话题：
+1. 避免int，尽量采用int8_t,int16_t,int32_t,int64_t
